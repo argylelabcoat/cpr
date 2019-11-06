@@ -4,11 +4,20 @@ project('cpr', 'cpp',
     default_options : ['cpp_std=c++14']
 )
 
-curl_dep = dependency('libcurl')
-thread_dep = dependency('threads')
+curl_dep = dependency('libcurl', static:true)
+
+thread_dep = dependency('threads', static:true)
+
 
 includes = include_directories('include')
 subdir('cpr')
 
-cpr_lib = static_library('cpr', include_directories: includes, sources: cpr_src, dependencies: [curl_dep, thread_dep])
-cpr_dep = declare_dependency(include_directories: includes, link_with: cpr_lib)
+cpr_lib = static_library(
+    'cpr', 
+    include_directories: includes,
+    sources: cpr_src,
+    dependencies: [curl_dep, thread_dep],
+	link_args: ['-static'])
+cpr_dep = declare_dependency(
+    include_directories: includes, 
+    link_with: cpr_lib)
